@@ -1,4 +1,4 @@
-// ----------------- Step 1: Variables y clases -----------------
+// Variables y Clases
 let activeVehicles = JSON.parse(localStorage.getItem('activeVehicles')) || [];
 let history = JSON.parse(localStorage.getItem('history')) || [];
 
@@ -17,13 +17,13 @@ class Vehicle {
     }
 }
 
-// ----------------- Step 2: Persistencia de datos -----------------
+// Persistencia de datos
 function persistData() {
     localStorage.setItem('activeVehicles', JSON.stringify(activeVehicles));
     localStorage.setItem('history', JSON.stringify(history));
 }
 
-// ----------------- Renderizado -----------------
+// Renderizado de la tabla
 function renderTable() {
     const tableBody = document.querySelector('#tablaVehiculos tbody');
     tableBody.innerHTML = '';
@@ -69,6 +69,7 @@ function renderTable() {
     });
 }
 
+// Resumen
 function renderSummary() {
     const totalVehiclesEl = document.getElementById('totalVehicles');
     const totalChargedEl = document.getElementById('totalCharged');
@@ -83,7 +84,7 @@ function renderSummary() {
     totalChargedEl.textContent = totalCharged.toLocaleString();
 }
 
-// ----------------- Reseteo diario automático -----------------
+// Reseteo diario
 function resetDailyStorage() {
     activeVehicles = [];
     history = [];
@@ -93,7 +94,6 @@ function resetDailyStorage() {
 
     console.log('LocalStorage reseteado a medianoche');
 
-    // Actualizar la UI
     renderTable();
     renderSummary();
 }
@@ -109,16 +109,22 @@ function checkAndReset() {
 function scheduleMidnightReset() {
     const now = new Date();
     const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0); // siguiente medianoche
+    midnight.setHours(24, 0, 0, 0);
     const msUntilMidnight = midnight - now;
 
     setTimeout(() => {
         resetDailyStorage();
-        scheduleMidnightReset(); // reprograma para la siguiente noche
+        scheduleMidnightReset();
     }, msUntilMidnight);
 }
 
-// ----------------- Init de la app -----------------
+// Función segura para parsear números
+function safeNumber(value) {
+    if (!value) return 0;
+    return parseFloat(value.toString().replace(',', '.')) || 0;
+}
+
+// Init de la App
 function init() {
     document.addEventListener('DOMContentLoaded', () => {
         const tableBody = document.querySelector('#tablaVehiculos tbody');
@@ -135,15 +141,13 @@ function init() {
         const cancelExit = document.getElementById('cancelExit');
         const confirmExit = document.getElementById('confirmExit');
 
-        // ----------------- Reseteo diario -----------------
         checkAndReset();
         scheduleMidnightReset();
 
-        // ----------------- Render inicial -----------------
         renderTable();
         renderSummary();
 
-        // ----------------- Botón Ingresar Vehículo -----------------
+        // Ingresar vehículo
         btnGetIntoCar.addEventListener('click', () => {
             plateInput.value = '';
             typeSelect.value = '';
@@ -181,7 +185,7 @@ function init() {
             entryModal.style.display = 'none';
         });
 
-        // ----------------- Botón Salió - Delegación de eventos -----------------
+        // Salida vehículo
         tableBody.addEventListener('click', (event) => {
             const button = event.target.closest('button.exit');
             if (!button) return;
@@ -202,9 +206,10 @@ function init() {
             vehicle.exitDate = now.toLocaleDateString();
             vehicle.exitTime = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
 
+            // Parseo seguro de fechas
             const [day, month, year] = vehicle.entryDate.split('/');
             const [hour, minute] = vehicle.entryTime.split(':');
-            const entryDateTime = new Date(year, month - 1, day, hour, minute);
+            const entryDateTime = new Date(year, month - 1, day, safeNumber(hour), safeNumber(minute));
 
             const diffMs = now - entryDateTime;
             vehicle.totalMinutes = Math.ceil(diffMs / 60000);
