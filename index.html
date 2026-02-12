@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playa de Estacionamiento</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Playa de Estacionamiento</h1>
+    <button id="btnIngresar">INGRESAR VEHÍCULO</button>
+  </header>
+
+  <main>
+    <!-- Tabla de vehículos activos -->
+    <section id="tablaSection">
+      <div class="tabla-wrapper">
+        <table id="tablaVehiculos">
+          <thead>
+            <tr>
+              <th>Patente</th>
+              <th>Hora</th>
+              <th>Tipo</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Filas dinámicas se renderizarán aquí -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Resumen diario -->
+    <section id="summary">
+      <h2>Resumen Diario</h2>
+        <p>Vehiculos Ingresados: <span id="totalVehicles">0</span></p>
+        <p>Dinero Cobrado: $<span id="totalCharged">0</span></p>
+    </section>
+  </main>
+
+<!-- Modal de ingreso -->
+<div id="entryModal" class="modal">
+  <div class="modal-content">
+    <h2>Ingresar Vehiculo</h2>
+    <label for="plateInput">Patente:</label>
+    <input type="text" id="plateInput" placeholder="123">
+    <br>
+    <label for="typeSelect">Tipo:</label>
+    <select id="typeSelect">
+      <option value="">Seleccionar tipo</option>
+      <option value="Car/SUV">Auto / SUV</option>
+      <option value="Pickup">Camioneta</option>
+      <option value="Motorcycle">Motocicleta</option>
+    </select>
+
+    <div class="modal-buttons">
+      <button id="cancelEntry">Cancelar</button>
+      <button id="confirmEntry">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Modal de egreso -->
+  <div id="exitModal" class="modal">
+    <div class="modal-content">
+      <h2>Vehiculo Egresa</h2>
+      <p id="exitInfo"></p>
+      <p id="exitCharge"></p>
+
+      <div class="modal-buttons">
+        <button id="cancelExit">Cancelar</button>
+        <button id="confirmExit">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="main.js"></script>
+</html>

@@ -1,0 +1,331 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Body y layout general */
+body {
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 15px;
+}
+
+/* Header */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+header button {
+  padding: 12px 25px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+}
+
+header button:active {
+  background-color: #0056b3;
+}
+
+/* Tabla */
+.tabla-wrapper {
+  overflow-x: auto; /* scroll horizontal en móviles */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+thead {
+  background-color: #007bff;
+  color: #fff;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  min-width: 80px; /* para que las columnas tengan tamaño mínimo */
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botón SALIO */
+button.salio {
+  padding: 8px 14px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button.salio:active {
+  background-color: #1e7e34;
+}
+
+/* Resumen diario */
+#resumenSection {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+#resumenSection h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+#resumenSection p {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+/* Media query para tablets y desktop */
+@media(min-width: 768px){
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  header h1 {
+    font-size: 26px;
+  }
+
+  header button {
+    width: auto;
+  }
+}
+/* MODAL */
+.modal {
+    display: none; /* oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+/* Contenido del modal */
+.modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #007bff;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+/* Botones dentro del modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
+}
+
+/* Botón Confirmar (azul) */
+#confirmEntry,
+#confirmExit {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#confirmEntry:hover,
+#confirmExit:hover {
+    background-color: #0056b3;
+}
+
+#confirmEntry:active,
+#confirmExit:active {
+    background-color: #00408d;
+}
+
+/* Botón Cancelar (gris) */
+#cancelEntry,
+#cancelExit {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#cancelEntry:hover,
+#cancelExit:hover {
+    background-color: #5a6268;
+}
+
+#cancelEntry:active,
+#cancelExit:active {
+    background-color: #4e555b;
+}
+
+/* Para que el modal se vea centrado con animación suave */
+.modal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* Texto dentro del modal */
+#exitInfo,
+#exitCharge {
+    margin-top: 10px;
+    font-size: 16px;
+}
+/* Tabla responsive mobile-first */
+#tablaVehiculos {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow-x: auto; /* scroll horizontal en móviles */
+    background-color: #fff;
+}
+
+/* Encabezado */
+#tablaVehiculos thead {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+#tablaVehiculos th, #tablaVehiculos td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    min-width: 80px; /* evita que las columnas se achiquen demasiado */
+}
+
+/* Filas alternadas */
+#tablaVehiculos tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#tablaVehiculos tbody tr:hover {
+    background-color: #e6f0ff;
+    transform: scale(1.01);
+    transition: 0.2s;
+}
+
+/* Botón EGRESA */
+button.exit {
+    padding: 10px 18px;
+    background-color: #28a745; /* verde */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 100%; /* full-width en mobile */
+    max-width: 120px; /* pero no demasiado grande */
+    transition: all 0.2s ease;
+}
+
+button.exit:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+button.exit:active {
+    background-color: #1e7e34;
+    transform: translateY(0);
+}
+
+/* Patente destacada */
+#tablaVehiculos td:first-child {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 15px;
+}
+
+/* Texto de celdas */
+#tablaVehiculos td {
+    font-size: 14px;
+    color: #333;
+    word-break: break-word; /* evita overflow en móviles */
+}
+
+/* Media query para tablets y desktop */
+@media(min-width: 768px){
+    #tablaVehiculos th, #tablaVehiculos td {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    button.exit {
+        width: auto; /* vuelve a tamaño normal */
+    }
+}
+
