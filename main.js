@@ -3,14 +3,12 @@ let activeVehicles = JSON.parse(localStorage.getItem('activeVehicles')) || [];
 let history = JSON.parse(localStorage.getItem('history')) || [];
 
 class Vehicle {
-    constructor(id, originalPlate, type, entryDate, entryTime) {
+    constructor(id, originalPlate, type, entryTimestamp) {
         this.id = id;
         this.originalPlate = originalPlate;
         this.type = type;
-        this.entryDate = entryDate;
-        this.entryTime = entryTime;
-        this.exitDate = null;
-        this.exitTime = null;
+        this.entryTimestamp = entryTimestamp; // guardamos timestamp en ms
+        this.exitTimestamp = null;
         this.totalMinutes = null;
         this.hoursCharged = null;
         this.amountCharged = null;
@@ -50,7 +48,8 @@ function renderTable() {
         tr.appendChild(tdPlate);
 
         const tdEntryTime = document.createElement('td');
-        tdEntryTime.textContent = vehicle.entryTime;
+        const entryTimeString = new Date(vehicle.entryTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        tdEntryTime.textContent = entryTimeString;
         tr.appendChild(tdEntryTime);
 
         const tdType = document.createElement('td');
@@ -118,12 +117,6 @@ function scheduleMidnightReset() {
     }, msUntilMidnight);
 }
 
-// Función segura para parsear números
-function safeNumber(value) {
-    if (!value) return 0;
-    return parseFloat(value.toString().replace(',', '.')) || 0;
-}
-
 // Init de la App
 function init() {
     document.addEventListener('DOMContentLoaded', () => {
@@ -171,11 +164,8 @@ function init() {
                 finalPlate += `(${samePlates.length + 1})`;
             }
 
-            const now = new Date();
-            const entryDate = now.toLocaleDateString();
-            const entryTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            const vehicle = new Vehicle(Date.now(), finalPlate, type, entryDate, entryTime);
+            const now = Date.now();
+            const vehicle = new Vehicle(Date.now(), finalPlate, type, now);
 
             activeVehicles.push(vehicle);
             persistData();
@@ -199,19 +189,13 @@ function init() {
             }
 
             const vehicle = activeVehicles[vehicleIndex];
-
             exitModal.style.display = 'flex';
 
-            const now = new Date();
-            vehicle.exitDate = now.toLocaleDateString();
-            vehicle.exitTime = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            const now = Date.now();
+            vehicle.exitTimestamp = now;
 
-            // Parseo seguro de fechas
-            const [day, month, year] = vehicle.entryDate.split('/');
-            const [hour, minute] = vehicle.entryTime.split(':');
-            const entryDateTime = new Date(year, month - 1, day, safeNumber(hour), safeNumber(minute));
-
-            const diffMs = now - entryDateTime;
+            // Cálculo seguro de minutos
+            const diffMs = vehicle.exitTimestamp - vehicle.entryTimestamp;
             vehicle.totalMinutes = Math.ceil(diffMs / 60000);
 
             const minutesPerTurn = 60;
@@ -222,10 +206,13 @@ function init() {
             const rates = { 'Car/SUV': 2500, 'Pickup': 3000, 'Motorcycle': 1000 };
             vehicle.amountCharged = vehicle.hoursCharged * (rates[vehicle.type] || 0);
 
+            const entryTimeString = new Date(vehicle.entryTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const exitTimeString = new Date(vehicle.exitTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             exitInfo.innerHTML = `
                 El Vehículo con Patente <b>${vehicle.originalPlate}</b> <br>
-                Ingresó a las <b>${vehicle.entryTime}</b> <br>
-                Salió a las <b>${vehicle.exitTime}</b> <br>
+                Ingresó a las <b>${entryTimeString}</b> <br>
+                Salió a las <b>${exitTimeString}</b> <br>
                 Tiempo total Estacionado: <b>${vehicle.totalMinutes} minutos</b> <br>
                 Horas cobradas: <b>${vehicle.hoursCharged}</b>.
             `;
