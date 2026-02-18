@@ -56,13 +56,23 @@ function renderTable() {
         tdType.textContent = vehicle.type;
         tr.appendChild(tdType);
 
-        const tdExit = document.createElement('td');
+        const tdAction = document.createElement('td');
+
         const btnExit = document.createElement('button');
         btnExit.textContent = 'FIN';
         btnExit.classList.add('exit');
         btnExit.setAttribute('data-id', vehicle.id);
-        tdExit.appendChild(btnExit);
-        tr.appendChild(tdExit);
+      
+
+        const btnCancel = document.createElement('button');
+        btnCancel.textContent = '✕';
+        btnCancel.classList.add('cancel');
+        btnCancel.setAttribute('data-id', vehicle.id);
+
+        tdAction.appendChild(btnExit);
+        tdAction.appendChild(btnCancel);
+        
+        tr.appendChild(tdAction);
 
         tableBody.appendChild(tr);
     });
@@ -134,6 +144,11 @@ function init() {
         const cancelExit = document.getElementById('cancelExit');
         const confirmExit = document.getElementById('confirmExit');
 
+        const cancelModal = document.getElementById('cancelModal');
+        const cancelInfo = document.getElementById('cancelInfo');
+        const cancelNo = document.getElementById('cancelCancel');
+        const cancelYes = document.getElementById('confirmCancel');
+
         checkAndReset();
         scheduleMidnightReset();
 
@@ -175,18 +190,47 @@ function init() {
             entryModal.style.display = 'none';
         });
 
-        // Salida vehículo
+       
+
+        
         tableBody.addEventListener('click', (event) => {
-            const button = event.target.closest('button.exit');
-            if (!button) return;
 
-            const vehicleId = button.getAttribute('data-id');
-            const vehicleIndex = activeVehicles.findIndex(v => v.id == vehicleId);
+            //Cancelar vehiculo
+            const buttonCancel = event.target.closest('button.cancel');
+            if(buttonCancel){
+                const vehicleId = buttonCancel.getAttribute('data-id');
+                const vehicleIndex = activeVehicles.findIndex(v => v.id == vehicleId);
 
-            if (vehicleIndex === -1) {
-                alert('Vehículo no encontrado');
+                const vehicle = activeVehicles[vehicleIndex];
+
+                 cancelInfo.innerHTML = `
+                                        ¿Seguro que querés cancelar el vehículo 
+                                        <b>${vehicle.originalPlate}</b>?
+                                    `;
+            
+                cancelModal.classList.add('show');
+
+                cancelNo.onclick = () => {
+                    cancelModal.classList.remove('show');
+                };
+
+                cancelYes.onclick = () =>{
+                    activeVehicles.splice(vehicleIndex, 1);
+                    persistData();
+                    renderTable();
+                    renderSummary();
+                    cancelModal.classList.remove('show');
+                };
+
                 return;
             }
+            
+            // Salida vehículo
+            const buttonSalir = event.target.closest('button.exit');
+            if (!buttonSalir) return;
+
+            const vehicleId = buttonSalir.getAttribute('data-id');
+            const vehicleIndex = activeVehicles.findIndex(v => v.id == vehicleId);
 
             const vehicle = activeVehicles[vehicleIndex];
             exitModal.style.display = 'flex';

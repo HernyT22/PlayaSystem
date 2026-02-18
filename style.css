@@ -329,3 +329,83 @@ button.exit:active {
     }
 }
 
+/* Botón CANCEL */
+/* Botón cancelar tipo cuadrado con X */
+button.cancel {
+    width: 40px;
+    height: 40px;
+    background-color: #dc3545; /* rojo */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+button.cancel:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+button.cancel:active {
+    background-color: #bd2130;
+    transform: translateY(0);
+}
+
+
+/* Botón confirmar cancelación dentro del modal */
+#confirmCancel {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+#confirmCancel:hover {
+    background-color: #c82333;
+}
+
+#confirmCancel:active {
+    background-color: #bd2130;
+}
+
+#cancelCancel {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#cancelCancel:hover {
+    background-color: #5a6268;
+}
+
+#cancelCancel:active {
+    background-color: #4e555b;
+}
+/* Celda de acciones */
+#tablaVehiculos td:last-child {
+    display: flex;
+    flex-direction: column;   /* 👈 uno debajo del otro */
+    gap: 6px;
+    align-items: stretch;     /* 👈 mismo ancho */
+}
+
+/* Ambos botones ocupan el 100% */
+#tablaVehiculos td:last-child button {
+    width: 100%;
+}
+@media(min-width: 768px){
+
+    #tablaVehiculos td:last-child {
+        flex-direction: row;      /* 👈 uno al lado del otro */
+        justify-content: center;
+    }
+
+    #tablaVehiculos td:last-child button {
+        width: auto;
+        min-width: 90px;          /* 👈 mismo tamaño mínimo */
+    }
+}
