@@ -37,7 +37,27 @@
     <section id="summary">
       <h2>Resumen Diario</h2>
         <p>Vehiculos Ingresados: <span id="totalVehicles">0</span></p>
-        <p>Dinero Cobrado: $<span id="totalCharged">0</span></p>
+        <p>Dinero Cobrado: $<span id="totalCharged">0</span></p>                
+    </section>
+
+    
+    <section id="tablaSection">
+      <h2>Historial de Vehiculos</h2>
+          <div class="tabla-wrapper">
+          <table id="tablaSummary">
+              <thead>
+                <tr>
+                  <th>Patente</th>
+                  <th>Tipo</th>
+                  <th>Hora ingreso</th>
+                  <th>Hora egreso</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+            <!-- Filas dinámicas se renderizarán aquí -->
+              </tbody>
+          </table>
     </section>
   </main>
 

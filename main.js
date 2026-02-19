@@ -1,6 +1,9 @@
 // Variables y Clases
 let activeVehicles = JSON.parse(localStorage.getItem('activeVehicles')) || [];
 let history = JSON.parse(localStorage.getItem('history')) || [];
+const rates = { 'Car/SUV': 2500, 'Pickup': 3000, 'Motorcycle': 1000 };
+
+
 
 class Vehicle {
     constructor(id, originalPlate, type, entryTimestamp) {
@@ -59,7 +62,7 @@ function renderTable() {
         const tdAction = document.createElement('td');
 
         const btnExit = document.createElement('button');
-        btnExit.textContent = 'FIN';
+        btnExit.textContent = '→';
         btnExit.classList.add('exit');
         btnExit.setAttribute('data-id', vehicle.id);
       
@@ -75,6 +78,62 @@ function renderTable() {
         tr.appendChild(tdAction);
 
         tableBody.appendChild(tr);
+    });
+}
+
+//Renderizar historial
+function renderTableSummary() {
+    const tableBody = document.querySelector('#tablaSummary tbody');
+    tableBody.innerHTML = '';
+
+    const plateCount = {};
+
+    history.forEach(vehicle => {
+        const plate = vehicle.originalPlate;
+        if (plateCount[plate]) {
+            plateCount[plate]++;
+        } else {
+            plateCount[plate] = 1;
+        }
+
+        let displayPlate = plate;
+        if (plateCount[plate] > 1) {
+            displayPlate += `(${plateCount[plate]})`;
+        }
+
+        const tr = document.createElement('tr');
+
+        const tdPlate = document.createElement('td');
+        tdPlate.textContent = displayPlate;
+        tr.appendChild(tdPlate);
+        
+        const tdType = document.createElement('td');
+        tdType.textContent = vehicle.type;
+        tr.appendChild(tdType);
+
+        const tdEntryTime = document.createElement('td');
+        const entryTimeString = new Date(vehicle.entryTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        tdEntryTime.textContent = entryTimeString;
+        tr.appendChild(tdEntryTime);
+
+        
+        const tdExitTime = document.createElement('td');
+        const exitTimeString = new Date(vehicle.exitTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        tdExitTime.textContent = exitTimeString;
+        tr.appendChild(tdExitTime);
+
+
+        const tdMontoCobrado = document.createElement('td');
+        
+        const Monto = vehicle.amountCharged = vehicle.hoursCharged * (rates[vehicle.type] || 0);
+        tdMontoCobrado.textContent = Monto;
+        tr.appendChild(tdMontoCobrado);
+         
+        tableBody.appendChild(tr);
+
+
+
+            
     });
 }
 
@@ -151,9 +210,9 @@ function init() {
 
         checkAndReset();
         scheduleMidnightReset();
-
         renderTable();
         renderSummary();
+        renderTableSummary();
 
         // Ingresar vehículo
         btnGetIntoCar.addEventListener('click', () => {
@@ -186,6 +245,7 @@ function init() {
             persistData();
             renderTable();
             renderSummary();
+            renderTableSummary();
 
             entryModal.style.display = 'none';
         });
@@ -219,6 +279,7 @@ function init() {
                     persistData();
                     renderTable();
                     renderSummary();
+                    renderTableSummary();
                     cancelModal.classList.remove('show');
                 };
 
@@ -273,6 +334,7 @@ function init() {
                 persistData();
                 renderTable();
                 renderSummary();
+                renderTableSummary();
                 exitModal.style.display = 'none';
             };
         });
